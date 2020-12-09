@@ -31,3 +31,5 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 
 Route::resource('roles', App\Http\Controllers\RoleController::class);
+
+Route::resource('permissions', App\Http\Controllers\PermissionController::class);

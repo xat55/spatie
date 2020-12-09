@@ -2,17 +2,17 @@
 
 namespace App\Repositories;
 
-// use App\Models\Role;
-use Spatie\Permission\Models\Role;
+// use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use App\Repositories\BaseRepository;
 
 /**
- * Class RoleRepository
+ * Class PermissionRepository
  * @package App\Repositories
- * @version December 9, 2020, 10:08 am UTC
+ * @version December 9, 2020, 11:50 am UTC
 */
 
-class RoleRepository extends BaseRepository
+class PermissionRepository extends BaseRepository
 {
     /**
      * @var array
@@ -37,6 +37,6 @@ class RoleRepository extends BaseRepository
      **/
     public function model()
     {
-        return Role::class;
+        return Permission::class;
     }
 }
