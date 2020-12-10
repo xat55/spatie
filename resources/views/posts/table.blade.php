@@ -5,7 +5,7 @@
                 <th>Header</th>
         <th>Text</th>
         <th>Author</th>
-        <th>Is Admin</th>
+        <!-- <th>Is Admin</th> -->
                 <th colspan="3">Action</th>
             </tr>
         </thead>
@@ -15,7 +15,7 @@
                 <td>{{ $post->header }}</td>
             <td>{{ $post->text }}</td>
             <td>{{ $post->author }}</td>
-            <td>{{ $post->is_admin }}</td>
+            <!-- <td>{{ $post->is_admin }}</td> -->
                 <td>
                     {!! Form::open(['route' => ['posts.destroy', $post->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>

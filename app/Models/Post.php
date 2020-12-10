@@ -27,11 +27,8 @@ class Post extends Model
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
 
-
     protected $dates = ['deleted_at'];
-
-
-
+    
     public $fillable = [
         'header',
         'text',
@@ -64,7 +61,5 @@ class Post extends Model
         'is_admin' => 'nullable|boolean',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
-    ];
-
-    
+    ];    
 }
