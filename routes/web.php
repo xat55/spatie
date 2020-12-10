@@ -26,10 +26,10 @@ Route::get('/', function () {
 });
 
 use App\Http\Controllers\ArticleController;
-// Route::get('main', [ArticleController::class, 'getArticles']);
-Route::get('main', function () {
-    return view('main');
-});
+Route::get('main', [ArticleController::class, 'getArticles']);
+// Route::get('main', function () {
+//     return view('main');
+// });
 Route::get('show-posts-author/{author}', [ArticleController::class, 'getArticlesOfAuthor'])->name('showPostsAuthor');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {

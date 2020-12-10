@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
-use DB;
+// use DB;
 
 class ArticleController extends Controller
 {
     public function getArticles()
     {
-        $result = DB::table('posts')
-            ->select()
-            ->where('author', 'name')
-            // ->offset(2)
-            // ->limit(1)
-            ->first();
+        // $result = DB::table('posts')
+        //     ->select()
+        //     ->where('author', 'name')
+        //     // ->offset(2)
+        //     // ->limit(1)
+        //     ->first();
         
         // dd($result->header);
         // dd($result->first());

@@ -7,26 +7,26 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
- * Class Post
- * @package App\Models
- * @version December 9, 2020, 12:46 pm UTC
- *
- * @property string $header
- * @property string $text
- * @property string $author
- * @property boolean $is_admin
- */
+* Class Post
+* @package App\Models
+* @version December 9, 2020, 12:46 pm UTC
+*
+* @property string $header
+* @property string $text
+* @property string $author
+* @property boolean $is_admin
+*/
 class Post extends Model
 {
     // use SoftDeletes;
-
+    
     use HasFactory;
-
+    
     public $table = 'posts';
     
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-
+    
     protected $dates = ['deleted_at'];
     
     public $fillable = [
@@ -35,12 +35,12 @@ class Post extends Model
         'author',
         'is_admin'
     ];
-
+    
     /**
-     * The attributes that should be casted to native types.
-     *
-     * @var array
-     */
+    * The attributes that should be casted to native types.
+    *
+    * @var array
+    */
     protected $casts = [
         'id' => 'integer',
         'header' => 'string',
@@ -48,12 +48,12 @@ class Post extends Model
         'author' => 'string',
         'is_admin' => 'boolean'
     ];
-
+    
     /**
-     * Validation rules
-     *
-     * @var array
-     */
+    * Validation rules
+    *
+    * @var array
+    */
     public static $rules = [
         'header' => 'required|string|max:128',
         'text' => 'required|string',
@@ -61,5 +61,15 @@ class Post extends Model
         'is_admin' => 'nullable|boolean',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
-    ];    
+    ];
+    
+    public function users()
+    {
+        return $this->belongsToMany('App\Models\User')->withTimestamps();
+    }
+    
+    public function categories()
+    {
+        return $this->belongsToMany('App\Models\Category')->withTimestamps();
+    }
 }
