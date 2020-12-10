@@ -19,10 +19,12 @@
 <!-- Is Admin Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('is_admin', 'Is Admin:') !!}
-    <label class="checkbox-inline">
-        {!! Form::hidden('is_admin', 0) !!}
-        {!! Form::checkbox('is_admin', '1', null) !!}
-    </label>
+    <div>
+        <label class="checkbox-inline">
+            {!! Form::hidden('is_admin', 0) !!}
+            {!! Form::checkbox('is_admin', '1', null) !!}
+        </label>
+    </div>
 </div>
 
 
