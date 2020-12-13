@@ -32,8 +32,7 @@ class Post extends Model
     public $fillable = [
         'header',
         'text',
-        'author',
-        'is_admin'
+        'author'
     ];
     
     /**

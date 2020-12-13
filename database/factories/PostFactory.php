@@ -25,7 +25,6 @@ class PostFactory extends Factory
             'header' => $this->faker->word,
             'text' => $this->faker->text,
             'author' => $this->faker->word,
-            // 'is_admin' => $this->faker->word,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

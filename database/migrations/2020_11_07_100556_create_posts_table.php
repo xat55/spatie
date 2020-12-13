@@ -19,7 +19,6 @@ class CreatePostsTable extends Migration
             $table->string('header', 128);
             $table->text('text');
             $table->string('author', 64);
-            $table->tinyInteger('is_admin')->nullable();
             
             $table->timestamps();
         });

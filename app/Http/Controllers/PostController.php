@@ -29,10 +29,8 @@ class PostController extends AppBaseController
      */
     public function index(Request $request)
     {
-        // $posts = $this->postRepository->all()->except('is_admin');
-        // $posts = $posts->except('is_admin')->get();
         $posts = $this->postRepository->all();
-// dd($posts);
+        
         return view('posts.index')
             ->with('posts', $posts);
     }

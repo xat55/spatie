@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Post_User;
+use App\Models\PostUser;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostUserFactory extends Factory
@@ -12,7 +12,7 @@ class PostUserFactory extends Factory
      *
      * @var string
      */
-    protected $model = Post_User::class;
+    protected $model = PostUser::class;
 
     /**
      * Define the model's default state.
@@ -22,7 +22,8 @@ class PostUserFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'post_id' => $this->faker->randomDigitNotNull,
+            'user_id' => 1
         ];
     }
 }

@@ -13,6 +13,6 @@ class PostUserSeeder extends Seeder
      */
     public function run()
     {
-        //
+        \App\Models\PostUser::factory(9)->create();
     }
 }
