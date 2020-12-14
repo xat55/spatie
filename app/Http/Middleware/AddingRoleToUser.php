@@ -4,6 +4,10 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\PermissionRegistrar;
+// use App\Models\Role;
 
 class AddingRoleToUser
 {
@@ -14,33 +18,28 @@ class AddingRoleToUser
     * @param  \Closure  $next
     * @return mixed
     */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $role)
     {
-        $response = $next($request);
+        $response = $next($request);          
         
-        $user = auth()->user();
+        $user = auth()->user();    
+        $rolesCount = Role::where('name', 'user')->count();
         
-        // echo "Аутентификация - ";
-        // dump(auth()->check());
-        
-        // if (isset($user)) {
-        //     // code...
-        //     dump($user->name);
-        // }
-        
-        if (isset($user)) {
+        if (!$user->hasRole('admin') && !$user->hasRole($role)) {
+            app()[PermissionRegistrar::class]->forgetCachedPermissions();
             
-            if ($user->hasRole('admin')) {
-                dump('Текущий пользователь - '.$user->name);
-            } elseif ($user->hasRole('user')) {
-                dump('Текущий пользователь - '.$user->name);
+            if (0 === $rolesCount) {                            
+                $roleUser = Role::create(['name' => $role]);                  
+                $user->assignRole($roleUser);                
+                $permissions = Permission::pluck('name');
+                
+                foreach ($permissions as $permission) {
+                    $roleUser->givePermissionTo($permission);
+                }            
             } else {
-                dump('Текущий пользователь - '.$user->name.' не admin и не user');
+                $user->assignRole($role);
             }
-        } else {
-            dump('Пользователь НЕ установлен');
         }
-        
         // return $next($request);
         return $response;
     }

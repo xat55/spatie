@@ -31,6 +31,9 @@ class PostController extends AppBaseController
     {
         $posts = $this->postRepository->all();
         
+        // $author = auth()->user()->name;
+        // $posts = $this->postRepository->where('author', $author)->get();
+        
         return view('posts.index')
             ->with('posts', $posts);
     }
@@ -42,6 +45,8 @@ class PostController extends AppBaseController
      */
     public function create()
     {
+        // $categories = Category::all();
+        
         return view('posts.create');
     }
 
