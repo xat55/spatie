@@ -34,7 +34,6 @@ Route::get('/', function () {
     // }
     // dd();
     
-    // $user = auth()->user();
     // // dump('Текущий польз-ль - '.$user->name);
     // if (isset($user)) {
     // 
@@ -50,6 +49,27 @@ Route::get('/', function () {
     // Permission::create(['name' => 'publish articles']);
     // Permission::create(['name' => 'unpublish articles']);
     
+    // $permissions = Permission::pluck('name')->all();
+    // dump($permissions);
+    // foreach ($permissions as $key => $permission) {
+    //     echo "$permission <br>";
+    // }
+    // $role = Role::where('name', 'user')->count();
+    if ($user = auth()->user()) {
+        dump($user->hasRole('user'));
+    }
+    
+    // dump(0 !== $role);
+    // $guard = auth()->guard(); // Retrieve the guard
+    // $sessionName = $guard->getName(); // Retrieve the session name for the guard
+    // // The following extracts the name of the guard by disposing of the first
+    // // and last sections delimited by "_"
+    // $parts = explode("_", $sessionName);
+    // unset($parts[count($parts)-1]);
+    // unset($parts[0]);
+    // $guardName = implode("_",$parts);
+    // dump($guardName);
+    
     return view('welcome');
 });
 
@@ -62,7 +82,7 @@ Route::get('main', [ArticleController::class, 'getArticles'])->name('main');
 // });
 Route::get('show-posts-author/{author}', [ArticleController::class, 'getArticlesOfAuthor'])->name('showPostsAuthor');
 
-Route::middleware(['auth:sanctum', 'verified', 'addingRoleToUser'])->get('/dashboard', function () {
+Route::middleware(['auth', 'verified', 'addingRoleToUser:user'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
@@ -71,7 +91,7 @@ Route::resource('roles', App\Http\Controllers\RoleController::class);
 
 Route::resource('permissions', App\Http\Controllers\PermissionController::class);
 
-Route::resource('posts', App\Http\Controllers\PostController::class);
-// Route::resource('posts', App\Http\Controllers\PostController::class)->middleware(['role:admin|user']);
+// Route::resource('posts', App\Http\Controllers\PostController::class);
+Route::resource('posts', App\Http\Controllers\PostController::class)->middleware(['role:admin|user']);
 
 Route::resource('categories', App\Http\Controllers\CategoryController::class);
