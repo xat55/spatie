@@ -45,7 +45,6 @@ class Post extends Model
         'header' => 'string',
         'text' => 'string',
         'author' => 'string',
-        'is_admin' => 'boolean'
     ];
     
     /**
@@ -57,7 +56,8 @@ class Post extends Model
         'header' => 'required|string|max:128',
         'text' => 'required|string',
         'author' => 'required|string|max:64',
-        'is_admin' => 'nullable|boolean',
+        // The categories may not have more than 6 items.
+        'categories' => 'array|max:6',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
     ];

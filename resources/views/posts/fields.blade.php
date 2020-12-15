@@ -16,17 +16,13 @@
     {!! Form::text('author', null, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
 </div>
 
-<!-- Is Admin Field -->
+<!-- Categories Field -->
 <div class="form-group col-sm-6">
-    {!! Form::label('is_admin', 'Is Admin:') !!}
-    <div>
-        <label class="checkbox-inline">
-            {!! Form::hidden('is_admin', 0) !!}
-            {!! Form::checkbox('is_admin', '1', null) !!}
-        </label>
-    </div>
+    {!! Form::label('categories', 'Categories:') !!}   
+    <p>
+        {!! Form::select('categories[]', $categories->pluck('name'), null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
+    </p> 
 </div>
-
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">

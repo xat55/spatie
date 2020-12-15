@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use App\Repositories\PostRepository;
+use App\Repositories\CategoryRepository;
+// use App\Models\Category;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
@@ -15,9 +17,10 @@ class PostController extends AppBaseController
     /** @var  PostRepository */
     private $postRepository;
 
-    public function __construct(PostRepository $postRepo)
+    public function __construct(PostRepository $postRepo, CategoryRepository $categoryRepo)
     {
         $this->postRepository = $postRepo;
+        $this->categoryRepository = $categoryRepo;
     }
 
     /**
@@ -29,10 +32,9 @@ class PostController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $posts = $this->postRepository->all();
-        
-        // $author = auth()->user()->name;
-        // $posts = $this->postRepository->where('author', $author)->get();
+        // $posts = $this->postRepository->all();
+        $author = auth()->user()->name;
+        $posts = $this->postRepository->all(['author' => $author]);
         
         return view('posts.index')
             ->with('posts', $posts);
@@ -45,8 +47,6 @@ class PostController extends AppBaseController
      */
     public function create()
     {
-        // $categories = Category::all();
-        
         return view('posts.create');
     }
 
@@ -98,14 +98,16 @@ class PostController extends AppBaseController
     public function edit($id)
     {
         $post = $this->postRepository->find($id);
-
+        $categories = $this->categoryRepository->all();
+        
         if (empty($post)) {
             Flash::error('Post not found');
 
             return redirect(route('posts.index'));
         }
 
-        return view('posts.edit')->with('post', $post);
+        return view('posts.edit', compact('post', 'categories'));
+        // ->with('post', $post);
     }
 
     /**
@@ -119,7 +121,20 @@ class PostController extends AppBaseController
     public function update($id, UpdatePostRequest $request)
     {
         $post = $this->postRepository->find($id);
-
+        // Отсоединяем все категории от поста
+        $post->categories()->detach();
+        
+        // $request->validate([
+        //     'categories'=>'required|string|max:256',
+        // ]);
+        
+        $categoryIds = $request->get('categories');
+        
+        foreach ($categoryIds as $categoryId) {
+            $category = $this->categoryRepository->find(++$categoryId);
+            $category->posts()->save($post);
+        }
+        
         if (empty($post)) {
             Flash::error('Post not found');
 

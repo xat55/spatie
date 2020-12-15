@@ -34,7 +34,7 @@
         <header class="main-header">
 
             <!-- Logo -->
-            <a href="{{ url('/') }}" class="logo">
+            <a href="{{ url('/main') }}" class="logo">
                 <!-- <b>InfyOm</b> -->
                 <b>Go on site</b>
             </a>

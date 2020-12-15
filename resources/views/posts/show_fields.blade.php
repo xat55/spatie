@@ -18,7 +18,7 @@
 
 <!-- Is Admin Field -->
 <div class="form-group">
-    {!! Form::label('is_admin', 'Is Admin:') !!}
-    <p>{{ $post->is_admin }}</p>
+    {!! Form::label('categories', 'Categories:') !!}
+    <p>{{ $post->categories()->pluck('name')->implode(', ') }}</p>
 </div>
 

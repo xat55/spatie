@@ -21,7 +21,6 @@ class PostRepository extends BaseRepository
         'header',
         'text',
         'author',
-        'is_admin'
     ];
 
     /**
