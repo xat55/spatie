@@ -20,6 +20,8 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
     use HasRoles;
 
+    public $table = 'users';
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +31,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin'
     ];
 
     /**
@@ -50,8 +51,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'is_admin' => 'boolean'
+        'email_verified_at' => 'datetime'
     ];
 
     /**

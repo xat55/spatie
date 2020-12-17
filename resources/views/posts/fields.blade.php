@@ -10,17 +10,19 @@
     {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
 </div>
 
-<!-- Author Field -->
-<div class="form-group col-sm-6">
-    {!! Form::label('author', 'Author:') !!}
-    {!! Form::text('author', null, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
-</div>
+@role('user')
+    <!-- Author Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('author', 'Author:') !!}
+        {!! Form::text('author', $user->name, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
+    </div>
+@endrole
 
 <!-- Categories Field -->
 <div class="form-group col-sm-6">
     {!! Form::label('categories', 'Categories:') !!}   
     <p>
-        {!! Form::select('categories[]', $categories->pluck('name'), null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
+        {!! Form::select('categories[]', $categories, null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
     </p> 
 </div>
 

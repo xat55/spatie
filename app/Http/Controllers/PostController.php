@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostRequest;
 use App\Http\Requests\UpdatePostRequest;
-use App\Repositories\PostRepository;
 use App\Repositories\CategoryRepository;
-// use App\Models\Category;
+use App\Repositories\PostRepository;
+use App\Repositories\UserRepository;
+// use App\Models\User;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
@@ -17,10 +18,11 @@ class PostController extends AppBaseController
     /** @var  PostRepository */
     private $postRepository;
 
-    public function __construct(PostRepository $postRepo, CategoryRepository $categoryRepo)
+    public function __construct(CategoryRepository $categoryRepo, PostRepository $postRepo, UserRepository $userRepo)
     {
-        $this->postRepository = $postRepo;
         $this->categoryRepository = $categoryRepo;
+        $this->postRepository = $postRepo;
+        $this->userRepository = $userRepo;
     }
 
     /**
@@ -47,7 +49,11 @@ class PostController extends AppBaseController
      */
     public function create()
     {
-        return view('posts.create');
+        $categories = $this->categoryRepository->all()->pluck('name')->toArray();
+        $categories = array_combine(range(1, count($categories)), $categories);
+        $user = auth()->user();
+        
+        return view('posts.create', compact('categories', 'user'));
     }
 
     /**
@@ -60,8 +66,19 @@ class PostController extends AppBaseController
     public function store(CreatePostRequest $request)
     {
         $input = $request->all();
-
-        $post = $this->postRepository->create($input);
+        $post = $this->postRepository->create($input);    
+        
+        // Get the user and associate it with the post
+        $userId = $request->get('userId');
+        $user = $this->userRepository->find($userId);
+        $post->users()->save($user);
+        
+        $categoryIds = $request->get('categories');
+        
+        foreach ($categoryIds as $categoryId) {
+            $category = $this->categoryRepository->find($categoryId);
+            $category->posts()->save($post);
+        }
 
         Flash::success('Post saved successfully.');
 
@@ -97,8 +114,18 @@ class PostController extends AppBaseController
      */
     public function edit($id)
     {
+        // $user = auth()->user();
+        // dd($user);
         $post = $this->postRepository->find($id);
-        $categories = $this->categoryRepository->all();
+        // $authorName = $post->author;
+        $user = $this->userRepository->all(['name' => $post->author])->first();
+        // $user = $post()->user;    
+        // dd($user);
+        // dd($user->name);
+        
+        $categories = $this->categoryRepository->all()->pluck('name')->toArray();
+        $categories = array_combine(range(1, count($categories)), $categories);
+        // dump($categories);
         
         if (empty($post)) {
             Flash::error('Post not found');
@@ -106,7 +133,7 @@ class PostController extends AppBaseController
             return redirect(route('posts.index'));
         }
 
-        return view('posts.edit', compact('post', 'categories'));
+        return view('posts.edit', compact('categories', 'post', 'user'));
         // ->with('post', $post);
     }
 
@@ -121,27 +148,30 @@ class PostController extends AppBaseController
     public function update($id, UpdatePostRequest $request)
     {
         $post = $this->postRepository->find($id);
-        // Отсоединяем все категории от поста
-        $post->categories()->detach();
-        
-        // $request->validate([
-        //     'categories'=>'required|string|max:256',
-        // ]);
-        
-        $categoryIds = $request->get('categories');
-        
-        foreach ($categoryIds as $categoryId) {
-            $category = $this->categoryRepository->find(++$categoryId);
-            $category->posts()->save($post);
-        }
         
         if (empty($post)) {
             Flash::error('Post not found');
 
             return redirect(route('posts.index'));
         }
-
+        
+        // Отсоединяем все категории и пользователей от поста
+        $post->categories()->detach();
+        $post->users()->detach();
+        
+        $categoryIds = $request->get('categories');
+        
+        foreach ($categoryIds as $categoryId) {
+            $category = $this->categoryRepository->find($categoryId);
+            // привязываем новый пост к категории
+            $category->posts()->save($post);
+        }    
         $post = $this->postRepository->update($request->all(), $id);
+        
+        $authorName = $request->get('author');
+        $user = $this->userRepository->all(['name' => $authorName])->first();
+        // привязываем новый пост к пользователю
+        $post->users()->save($user);
 
         Flash::success('Post updated successfully.');
 
@@ -160,6 +190,10 @@ class PostController extends AppBaseController
     public function destroy($id)
     {
         $post = $this->postRepository->find($id);
+        // Отвяжем категории от поста
+        $post->categories()->detach();
+        // Отвяжем пользователя от поста
+        $post->users()->detach();
 
         if (empty($post)) {
             Flash::error('Post not found');

@@ -57,7 +57,7 @@ class Post extends Model
         'text' => 'required|string',
         'author' => 'required|string|max:64',
         // The categories may not have more than 6 items.
-        'categories' => 'array|max:6',
+        'categories' => 'required|array|max:6',
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
     ];

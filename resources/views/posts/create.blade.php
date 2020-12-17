@@ -11,7 +11,7 @@
         <div class="box box-primary">
             <div class="box-body">
                 <div class="row">
-                    {!! Form::open(['route' => 'posts.store']) !!}
+                    {!! Form::open(['route' => ['posts.store', 'userId'=>$user]]) !!}
 
                         @include('posts.fields')
 
