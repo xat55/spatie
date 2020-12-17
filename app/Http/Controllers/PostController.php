@@ -7,7 +7,6 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
-// use App\Models\User;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
@@ -34,7 +33,6 @@ class PostController extends AppBaseController
      */
     public function index(Request $request)
     {
-        // $posts = $this->postRepository->all();
         $author = auth()->user()->name;
         $posts = $this->postRepository->all(['author' => $author]);
         
@@ -114,18 +112,11 @@ class PostController extends AppBaseController
      */
     public function edit($id)
     {
-        // $user = auth()->user();
-        // dd($user);
         $post = $this->postRepository->find($id);
-        // $authorName = $post->author;
         $user = $this->userRepository->all(['name' => $post->author])->first();
-        // $user = $post()->user;    
-        // dd($user);
-        // dd($user->name);
         
         $categories = $this->categoryRepository->all()->pluck('name')->toArray();
         $categories = array_combine(range(1, count($categories)), $categories);
-        // dump($categories);
         
         if (empty($post)) {
             Flash::error('Post not found');
@@ -134,7 +125,6 @@ class PostController extends AppBaseController
         }
 
         return view('posts.edit', compact('categories', 'post', 'user'));
-        // ->with('post', $post);
     }
 
     /**
@@ -151,26 +141,28 @@ class PostController extends AppBaseController
         
         if (empty($post)) {
             Flash::error('Post not found');
-
+        
             return redirect(route('posts.index'));
         }
         
-        // Отсоединяем все категории и пользователей от поста
+        // Отсоединяем все категории и пользователя от поста
         $post->categories()->detach();
         $post->users()->detach();
         
+        // привязываем новый пост к категории
         $categoryIds = $request->get('categories');
         
         foreach ($categoryIds as $categoryId) {
             $category = $this->categoryRepository->find($categoryId);
-            // привязываем новый пост к категории
             $category->posts()->save($post);
-        }    
+        } 
+        
+        // Обновляем редактируемый пост
         $post = $this->postRepository->update($request->all(), $id);
         
+        // привязываем новый пост к пользователю
         $authorName = $request->get('author');
         $user = $this->userRepository->all(['name' => $authorName])->first();
-        // привязываем новый пост к пользователю
         $post->users()->save($user);
 
         Flash::success('Post updated successfully.');

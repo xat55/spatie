@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\Models\Post;
 // use Spatie\Permission\Models\Post;
 use App\Repositories\BaseRepository;
-
+use Flash;
 /**
  * Class PostRepository
  * @package App\Repositories
