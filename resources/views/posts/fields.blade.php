@@ -5,13 +5,15 @@
 </div>
 
 <!-- Text Field -->
-<div class="form-group col-sm-12 col-lg-12">
-    {!! Form::label('text', 'Text:') !!}
-    {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
-</div>
+@can('publish articles')
+    <div class="form-group col-sm-12 col-lg-12">
+        {!! Form::label('text', 'Text:') !!}
+        {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
+    </div>
+@endcan
 
-@role('user')
-    <!-- Author Field -->
+<!-- Author Field -->
+@role('admin')
     <div class="form-group col-sm-6">
         {!! Form::label('author', 'Author:') !!}
         {!! Form::text('author', $user->name, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
