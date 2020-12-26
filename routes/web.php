@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+// use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,14 @@ use Spatie\Permission\Models\Permission;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+// Route::get('/user-profile', function () {
+// 
+//     // return view('profile.show', [
+//     //     // 'request' => $request,
+//     //     // 'user' => $request->user(),
+//     // ]);
+// });
 
 Route::get('/', function () {
     
@@ -55,9 +64,6 @@ Route::get('/', function () {
     //     echo "$permission <br>";
     // }
     // $role = Role::where('name', 'user')->count();
-    if ($user = auth()->user()) {
-        dump($user->hasRole('user'));
-    }
     
     // dump(0 !== $role);
     // $guard = auth()->guard(); // Retrieve the guard
@@ -69,6 +75,9 @@ Route::get('/', function () {
     // unset($parts[0]);
     // $guardName = implode("_",$parts);
     // dump($guardName);
+    if ($user = auth()->user()) {
+        dump($user->hasRole('user'));
+    }
     
     return view('welcome');
 });
