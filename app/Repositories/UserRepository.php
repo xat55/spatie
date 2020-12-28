@@ -3,13 +3,12 @@
 namespace App\Repositories;
 
 use App\Models\User;
-// use Spatie\Permission\Models\User;
 use App\Repositories\BaseRepository;
 
 /**
  * Class UserRepository
  * @package App\Repositories
- * @version December 9, 2020, 10:08 am UTC
+ * @version December 26, 2020, 4:31 pm UTC
 */
 
 class UserRepository extends BaseRepository
@@ -19,7 +18,14 @@ class UserRepository extends BaseRepository
      */
     protected $fieldSearchable = [
         'name',
-        'guard_name'
+        'email',
+        'email_verified_at',
+        'password',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
+        'remember_token',
+        'current_team_id',
+        'profile_photo_path'
     ];
 
     /**

@@ -28,6 +28,13 @@
     </p> 
 </div>
 
+<!-- Hidden Author Field -->
+@auth()
+    <div class="form-group col-sm-6">
+        {!! Form::hidden('author', $user->name, $attributes = []) !!}
+    </div>
+@endauth
+
 <!-- Submit Field -->
 <div class="form-group col-sm-12">
     {!! Form::submit('Save', ['class' => 'btn btn-primary']) !!}

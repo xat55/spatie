@@ -65,6 +65,7 @@ abstract class BaseRepository
      * Paginate records for scaffold.
      *
      * @param int $perPage
+     * @param array $search
      * @param array $columns
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */

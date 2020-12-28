@@ -76,7 +76,7 @@ Route::get('/', function () {
     // $guardName = implode("_",$parts);
     // dump($guardName);
     if ($user = auth()->user()) {
-        dump($user->hasRole('user'));
+        echo 'Роль user: ', $user->hasRole('user');
     }
     
     return view('welcome');
@@ -95,12 +95,12 @@ Route::middleware(['auth', 'verified', 'addingRoleToUser:user'])->get('/dashboar
     return view('dashboard');
 })->name('dashboard');
 
+Route::middleware(['auth', 'verified'])->group(function () {    
+    // Route::resource('posts', App\Http\Controllers\PostController::class);
+    Route::resource('posts', App\Http\Controllers\PostController::class)->middleware(['role:admin|user']);
+    Route::resource('roles', App\Http\Controllers\RoleController::class);
+    Route::resource('permissions', App\Http\Controllers\PermissionController::class);
+    Route::resource('categories', App\Http\Controllers\CategoryController::class);
+    Route::resource('users', App\Http\Controllers\UserController::class);
+});
 
-Route::resource('roles', App\Http\Controllers\RoleController::class);
-
-Route::resource('permissions', App\Http\Controllers\PermissionController::class);
-
-// Route::resource('posts', App\Http\Controllers\PostController::class);
-Route::resource('posts', App\Http\Controllers\PostController::class)->middleware(['role:admin|user']);
-
-Route::resource('categories', App\Http\Controllers\CategoryController::class);

@@ -5,7 +5,7 @@
                 <th>Header</th>
                 <th>Text</th>
                 <th>Categories</th>
-                <!-- <th>+Author</th> -->
+                <th>Author</th>
                 <th colspan="3">Action</th>
             </tr>
         </thead>
@@ -15,7 +15,7 @@
                 <td>{{ $post->header }}</td>
                 <td>{{ $post->text }}</td>
                 <td>{{ $post->categories()->pluck('name')->implode(', ') }}</td>
-                <!-- <td>{{ $post->author }}</td> -->
+                <td>{{ $post->author }}</td>
                 <td>
                     {!! Form::open(['route' => ['posts.destroy', $post->id], 'method' => 'delete']) !!}
                     <div class='btn-group'>
@@ -29,4 +29,5 @@
             @endforeach
         </tbody>
     </table>
+    {{ $posts->links() }}
 </div>

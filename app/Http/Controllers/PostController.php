@@ -15,7 +15,9 @@ use Response;
 class PostController extends AppBaseController
 {
     /** @var  PostRepository */
+    private $categoryRepository;
     private $postRepository;
+    private $userRepository;
 
     public function __construct(CategoryRepository $categoryRepo, PostRepository $postRepo, UserRepository $userRepo)
     {
@@ -33,11 +35,17 @@ class PostController extends AppBaseController
      */
     public function index(Request $request)
     {
-        $author = auth()->user()->name;
-        $posts = $this->postRepository->all(['author' => $author]);
+        $user = auth()->user();
         
-        return view('posts.index')
-            ->with('posts', $posts);
+        if ($user->hasRole('admin')) {
+            $posts = $this->postRepository;
+        } else {
+            $posts = $user->posts()->orderBy('id');
+        }
+        
+        $posts = $posts->paginate(3);
+        
+        return view('posts.index')->with('posts', $posts);
     }
 
     /**

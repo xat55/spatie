@@ -34,8 +34,8 @@
         <header class="main-header">
 
             <!-- Logo -->
-            <a href="#" class="logo">
-                <b>InfyOm</b>
+            <a href="{{ route('main') }}" class="logo">
+                <b>Go on site</b>
             </a>
 
             <!-- Header Navbar -->

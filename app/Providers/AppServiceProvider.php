@@ -23,6 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // view()->composer('layouts.sidebar', function ($view) {
+        //     $view->with('popular_posts', Post::orderBy('views', 'desc')->limit(3)->get());
+        //     $view->with('cats', Category::withCount('posts')->orderBy('posts_count', 'desc')->get());
+        // });
     }
 }

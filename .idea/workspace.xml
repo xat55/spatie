@@ -2,12 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="71c2af79-1dee-42a3-9df7-066f3b4afba8" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env.example" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/auth/register.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/auth/register.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PostController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/BaseRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/BaseRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Repositories/UserRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Repositories/UserRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/factories/UserFactory.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/factories/UserFactory.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/app.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/profile/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/profile/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/layouts/menu.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layouts/menu.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/posts/fields.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/posts/fields.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/posts/table.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/posts/table.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage/debugbar/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/storage/debugbar/.gitignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,6 +196,7 @@
       <workItem from="1608046103626" duration="532000" />
       <workItem from="1608214075533" duration="821000" />
       <workItem from="1608394044509" duration="30000" />
+      <workItem from="1609143857798" duration="1466000" />
     </task>
     <servers />
   </component>
