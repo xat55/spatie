@@ -11,12 +11,14 @@
 </div>
 
 <!-- Author Field -->
-<div class="form-group">
-    {!! Form::label('author', 'Author:') !!}
-    <p>{{ $post->author }}</p>
-</div>
+@role('admin')
+    <div class="form-group">
+        {!! Form::label('author', 'Author:') !!}
+        <p>{{ $post->users()->pluck('name')->implode(', ') }}</p>
+    </div>
+@endrole
 
-<!-- Is Admin Field -->
+<!-- Category Field -->
 <div class="form-group">
     {!! Form::label('categories', 'Categories:') !!}
     <p>{{ $post->categories()->pluck('name')->implode(', ') }}</p>

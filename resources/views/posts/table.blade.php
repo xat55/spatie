@@ -15,10 +15,10 @@
                 <td>{{ $post->header }}</td>
                 <td>{{ $post->text }}</td>
                 <td>{{ $post->categories()->pluck('name')->implode(', ') }}</td>
-                <td>{{ $post->author }}</td>
-                <td>
+                <td>{{ $post->users()->pluck('name')->implode(', ') }}</td>
+                <td> 
                     {!! Form::open(['route' => ['posts.destroy', $post->id], 'method' => 'delete']) !!}
-                    <div class='btn-group'>
+                    <div class="btn-group">
                         <a href="{{ route('posts.show', [$post->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-eye-open"></i></a>
                         <a href="{{ route('posts.edit', [$post->id]) }}" class='btn btn-default btn-xs'><i class="glyphicon glyphicon-edit"></i></a>
                         {!! Form::button('<i class="glyphicon glyphicon-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'onclick' => "return confirm('Are you sure?')"]) !!}

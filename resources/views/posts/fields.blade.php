@@ -4,6 +4,11 @@
     {!! Form::text('header', null, ['class' => 'form-control','maxlength' => 128,'maxlength' => 128]) !!}
 </div>
 
+<!-- Hidden Author Field -->
+<div class="form-group col-sm-6">
+    {!! Form::hidden('author', $user->name, $attributes = []) !!}
+</div>
+
 <!-- Text Field -->
 @can('publish articles')
     <div class="form-group col-sm-12 col-lg-12">
@@ -11,14 +16,6 @@
         {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
     </div>
 @endcan
-
-<!-- Author Field -->
-@role('admin')
-    <div class="form-group col-sm-6">
-        {!! Form::label('author', 'Author:') !!}
-        {!! Form::text('author', $user->name, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
-    </div>
-@endrole
 
 <!-- Categories Field -->
 <div class="form-group col-sm-6">
@@ -28,12 +25,23 @@
     </p> 
 </div>
 
-<!-- Hidden Author Field -->
-@auth()
+<!-- Author Field -->
+@role('admin')
     <div class="form-group col-sm-6">
-        {!! Form::hidden('author', $user->name, $attributes = []) !!}
+        {!! Form::label('author', 'Author:') !!}
+        {!! Form::text('author', $user->name, ['class' => 'form-control','maxlength' => 64,'maxlength' => 64]) !!}
     </div>
-@endauth
+
+    <!-- Users Field -->
+    <div class="form-group col-sm-6">
+        {!! Form::label('users', 'Users:') !!}   
+        <p>
+            {!! Form::select('users[]', $users, null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
+        </p> 
+    </div>
+@endrole
+
+
 
 <!-- Submit Field -->
 <div class="form-group col-sm-12">

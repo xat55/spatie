@@ -38,13 +38,13 @@ class PostController extends AppBaseController
         $user = auth()->user();
         
         if ($user->hasRole('admin')) {
-            $posts = $this->postRepository;
+            $posts = $this->postRepository->model()::orderBy('id', 'desc');
         } else {
-            $posts = $user->posts()->orderBy('id');
+            $posts = $user->posts()->orderBy('id', 'desc');
         }
         
-        $posts = $posts->paginate(3);
-        
+        $posts = $posts->paginate(13);
+        // dd($posts);
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -71,7 +71,7 @@ class PostController extends AppBaseController
      */
     public function store(CreatePostRequest $request)
     {
-        $input = $request->all();
+        $input = $request->except('author');
         $post = $this->postRepository->create($input);    
         
         // Get the user and associate it with the post
@@ -121,7 +121,11 @@ class PostController extends AppBaseController
     public function edit($id)
     {
         $post = $this->postRepository->find($id);
-        $user = $this->userRepository->all(['name' => $post->author])->first();
+        $user = $post->users->first();
+        
+        // Get all users
+        $users = $this->userRepository->all()->pluck('name')->toArray();
+        $users = array_combine(range(1, count($users)), $users);
         
         $categories = $this->categoryRepository->all()->pluck('name')->toArray();
         $categories = array_combine(range(1, count($categories)), $categories);
@@ -131,8 +135,8 @@ class PostController extends AppBaseController
 
             return redirect(route('posts.index'));
         }
-
-        return view('posts.edit', compact('categories', 'post', 'user'));
+        
+        return view('posts.edit', compact('categories', 'post', 'user', 'users'));
     }
 
     /**
@@ -166,7 +170,7 @@ class PostController extends AppBaseController
         } 
         
         // Обновляем редактируемый пост
-        $post = $this->postRepository->update($request->all(), $id);
+        $post = $this->postRepository->update($request->except('author'), $id);
         
         // привязываем новый пост к пользователю
         $authorName = $request->get('author');

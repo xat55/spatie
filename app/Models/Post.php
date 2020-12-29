@@ -55,7 +55,7 @@ class Post extends Model
     public static $rules = [
         'header' => 'required|string|max:128',
         'text' => 'required|string',
-        'author' => 'required|string|max:64',
+        // 'author' => 'required|string|max:64',
         // The categories may not have more than 6 items.
         'categories' => 'required|array|max:6',
         'created_at' => 'nullable',
