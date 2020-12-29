@@ -140,6 +140,9 @@ class CategoryController extends AppBaseController
     public function destroy($id)
     {
         $category = $this->categoryRepository->find($id);
+        
+        // Отвяжем категории от постов
+        $category->posts()->detach();
 
         if (empty($category)) {
             Flash::error('Category not found');
