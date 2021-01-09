@@ -13,6 +13,6 @@ class CategoryPostSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\CategoryPost::factory()->count(9)->create();
+        \App\Models\CategoryPost::factory()->count(20)->create();
     }
 }

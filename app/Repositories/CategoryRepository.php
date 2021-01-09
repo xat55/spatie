@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Models\Category;
-// use Spatie\Permission\Models\Category;
 use App\Repositories\BaseRepository;
 
 /**

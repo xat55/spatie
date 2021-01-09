@@ -22,9 +22,9 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'header' => $this->faker->word,
+            'header' => ucfirst($this->faker->word),
             'text' => $this->faker->text,
-            'author' => $this->faker->word,
+            // 'user_id' => $this->faker->randomDigitNotNull,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')
         ];

@@ -54,10 +54,11 @@ class UserController extends AppBaseController
      */
     public function store(CreateUserRequest $request)
     {
-        $input = $request->all();
+        $input = $request->except('password');
+        $input['password'] = bcrypt($request->get('password'));
 
         $user = $this->userRepository->create($input);
-
+        
         Flash::success('User saved successfully.');
 
         return redirect(route('users.index'));

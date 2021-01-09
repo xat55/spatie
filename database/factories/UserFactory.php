@@ -29,7 +29,7 @@ class UserFactory extends Factory
             'two_factor_secret' => $this->faker->text,
             'two_factor_recovery_codes' => $this->faker->text,
             'remember_token' => $this->faker->word,
-            'current_team_id' => $this->faker->word,
+            // 'current_team_id' => $this->faker->word,
             'profile_photo_path' => $this->faker->text,
             'created_at' => $this->faker->date('Y-m-d H:i:s'),
             'updated_at' => $this->faker->date('Y-m-d H:i:s')

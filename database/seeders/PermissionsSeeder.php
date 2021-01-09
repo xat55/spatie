@@ -21,10 +21,10 @@ class PermissionsSeeder extends Seeder
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
         
         // create permissions
-        // Permission::create(['name' => 'edit articles']);
-        // Permission::create(['name' => 'delete articles']);
-        // Permission::create(['name' => 'publish articles']);
-        // Permission::create(['name' => 'unpublish articles']);
+        Permission::create(['name' => 'edit articles']);
+        Permission::create(['name' => 'delete articles']);
+        Permission::create(['name' => 'publish articles']);
+        Permission::create(['name' => 'unpublish articles']);
         
         // gets all permissions via Gate::before rule; see AuthServiceProvider
         $roleAdmin = Role::create(['name' => 'admin']);

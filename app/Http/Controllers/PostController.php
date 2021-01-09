@@ -38,13 +38,12 @@ class PostController extends AppBaseController
         $user = auth()->user();
         
         if ($user->hasRole('admin')) {
-            $posts = $this->postRepository->model()::orderBy('id', 'desc');
+            $posts = $this->postRepository->allQuery([], 'id', 'desc');
         } else {
-            $posts = $user->posts()->orderBy('id', 'desc');
+            $posts = $this->postRepository->allQuery(['user_id' => $user->id]);
         }
+        $posts = $posts->paginate(3);
         
-        $posts = $posts->paginate(13);
-        // dd($posts);
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -77,14 +76,11 @@ class PostController extends AppBaseController
         // Get the user and associate it with the post
         $userId = $request->get('userId');
         $user = $this->userRepository->find($userId);
-        $post->users()->save($user);
+        $post->user()->associate($user);
         
+        // привязываем категорию к посту
         $categoryIds = $request->get('categories');
-        
-        foreach ($categoryIds as $categoryId) {
-            $category = $this->categoryRepository->find($categoryId);
-            $category->posts()->save($post);
-        }
+        $this->associateCategoriesToPost($categoryIds, $post);
 
         Flash::success('Post saved successfully.');
 
@@ -121,12 +117,14 @@ class PostController extends AppBaseController
     public function edit($id)
     {
         $post = $this->postRepository->find($id);
-        $user = $post->users->first();
+        $userId = $post->user_id;
+        $user = $this->userRepository->find($userId);
         
         // Get all users
         $users = $this->userRepository->all()->pluck('name')->toArray();
         $users = array_combine(range(1, count($users)), $users);
         
+        // Get all categories
         $categories = $this->categoryRepository->all()->pluck('name')->toArray();
         $categories = array_combine(range(1, count($categories)), $categories);
         
@@ -157,17 +155,13 @@ class PostController extends AppBaseController
             return redirect(route('posts.index'));
         }
         
-        // Отсоединяем все категории и пользователя от поста
+        // Отсоединяем пост от пользователя и категорий  
         $post->categories()->detach();
-        $post->users()->detach();
+        $post->user()->dissociate();
         
-        // привязываем новый пост к категории
+        // привязываем категорию к посту
         $categoryIds = $request->get('categories');
-        
-        foreach ($categoryIds as $categoryId) {
-            $category = $this->categoryRepository->find($categoryId);
-            $category->posts()->save($post);
-        } 
+        $this->associateCategoriesToPost($categoryIds, $post);
         
         // Обновляем редактируемый пост
         $post = $this->postRepository->update($request->except('author'), $id);
@@ -175,7 +169,8 @@ class PostController extends AppBaseController
         // привязываем новый пост к пользователю
         $authorName = $request->get('author');
         $user = $this->userRepository->all(['name' => $authorName])->first();
-        $post->users()->save($user);
+        $post->user()->associate($user);
+        $post->save();
 
         Flash::success('Post updated successfully.');
 
@@ -197,7 +192,7 @@ class PostController extends AppBaseController
         // Отвяжем категории от поста
         $post->categories()->detach();
         // Отвяжем пользователя от поста
-        $post->users()->detach();
+        $post->user()->dissociate();
 
         if (empty($post)) {
             Flash::error('Post not found');
@@ -210,5 +205,13 @@ class PostController extends AppBaseController
         Flash::success('Post deleted successfully.');
 
         return redirect(route('posts.index'));
+    }
+    
+    private function associateCategoriesToPost($categoryIds, $post)
+    {
+        for ($i = 0; $i < count($categoryIds); $i++) {
+            $category = $this->categoryRepository->all([], 'id', 'asc', --$categoryIds[$i], 1)->first();
+            $category->posts()->save($post);
+        }
     }
 }

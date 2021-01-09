@@ -22,7 +22,7 @@ class CategoryPostFactory extends Factory
     public function definition()
     {
         return [
-            'post_id' => $this->faker->randomDigitNotNull,
+            'post_id' => $this->faker->numberBetween($min = 1, $max = 20),
             'category_id' => $this->faker->randomDigitNotNull
         ];
     }

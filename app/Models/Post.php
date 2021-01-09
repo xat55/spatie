@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Eloquent as Model;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -32,7 +33,7 @@ class Post extends Model
     public $fillable = [
         'header',
         'text',
-        'author'
+        'user_id'
     ];
     
     /**
@@ -44,7 +45,7 @@ class Post extends Model
         'id' => 'integer',
         'header' => 'string',
         'text' => 'string',
-        'author' => 'string',
+        'user_id' => 'integer',
     ];
     
     /**
@@ -62,9 +63,20 @@ class Post extends Model
         'updated_at' => 'nullable'
     ];
     
-    public function users()
+    public function getPostDate()
     {
-        return $this->belongsToMany('App\Models\User')->withTimestamps();
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
+    }
+    
+    public function getPostDateWithoutYear()
+    {
+        return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F');
+    }
+    
+    public function user()
+    {
+        return $this->belongsTo('App\Models\User');
+        // return $this->belongsTo('App\Models\User')->withTimestamps();
     }
     
     public function categories()

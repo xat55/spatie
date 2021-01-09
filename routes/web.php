@@ -84,12 +84,31 @@ Route::get('/', function () {
 
 
 
-use App\Http\Controllers\ArticleController;
-Route::get('main', [ArticleController::class, 'getArticles'])->name('main');
+use App\Http\Controllers\Site\MainController;
+// Route::get('main', [IndexController::class, 'getMainPage'])->name('main');
+Route::get('main', [MainController::class, 'index'])->name('main');
 // Route::get('main', function () {
 //     return view('main');
 // });
-Route::get('show-posts-author/{author}', [ArticleController::class, 'getArticlesOfAuthor'])->name('showPostsAuthor');
+use App\Http\Controllers\Site\SinglePostController;
+Route::get('show-post/{post_id}', [SinglePostController::class, 'index'])->name('single_post');
+
+use App\Http\Controllers\Site\AuthorPostsController;
+Route::get('show-posts-author/{user_id}', [AuthorPostsController::class, 'index'])->name('show_posts_author');
+
+use App\Http\Controllers\Site\CategoryPostsController;
+Route::get('show-posts-category/{category_id}', [CategoryPostsController::class, 'index'])->name('show_posts_category');
+
+use App\Http\Controllers\Site\SearchPostsController;
+Route::get('search', [SearchPostsController::class, 'index'])->name('search');
+
+
+
+// Route::get('show-posts-author/{user_id}', [MainController::class, 'getArticlesOfAuthor'])->name('showPostsAuthor');
+// Route::get('show-posts-category/{category}', [MainController::class, 'getArticlesOfCategory'])->name('showPostsCategory');
+
+
+
 
 Route::middleware(['auth', 'verified', 'addingRoleToUser:user'])->get('/dashboard', function () {
     return view('dashboard');

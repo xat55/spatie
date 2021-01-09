@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Container\Container as Application;
 use Illuminate\Database\Eloquent\Model;
+use Config;
 
 
 abstract class BaseRepository
@@ -71,11 +72,18 @@ abstract class BaseRepository
      */
     public function paginate($perPage, $columns = ['*'])
     {
-        $query = $this->allQuery();
+        // $query = $this->allQuery([], $fieldOrderBy, $orderDirection);
 
         return $query->paginate($perPage, $columns);
     }
+    
+    public function get($search = '*')
+    {
+        $query = $this->model->select($search);
 
+        return $query->get();
+    }
+    
     /**
      * Build a query for retrieving all records.
      *
@@ -84,7 +92,7 @@ abstract class BaseRepository
      * @param int|null $limit
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function allQuery($search = [], $skip = null, $limit = null)
+    public function allQuery($search = [], $fieldOrderBy = null, $orderDirection = 'ASC', $skip = null, $limit = null)
     {
         $query = $this->model->newQuery();
 
@@ -95,7 +103,11 @@ abstract class BaseRepository
                 }
             }
         }
-
+        
+        if (isset($fieldOrderBy)) {
+            $query->orderBy($fieldOrderBy, $orderDirection);
+        }
+        
         if (!is_null($skip)) {
             $query->skip($skip);
         }
@@ -117,9 +129,9 @@ abstract class BaseRepository
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
-    public function all($search = [], $skip = null, $limit = null, $columns = ['*'])
+    public function all($search = [], $fieldOrderBy = null, $orderDirection = 'ASC', $skip = null, $limit = null, $columns = ['*'])
     {
-        $query = $this->allQuery($search, $skip, $limit);
+        $query = $this->allQuery($search, $fieldOrderBy, $orderDirection, $skip, $limit);
 
         return $query->get($columns);
     }
