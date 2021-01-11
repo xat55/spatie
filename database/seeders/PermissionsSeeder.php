@@ -19,23 +19,26 @@ class PermissionsSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
-        
+
         // create permissions
         Permission::create(['name' => 'edit articles']);
         Permission::create(['name' => 'delete articles']);
         Permission::create(['name' => 'publish articles']);
         Permission::create(['name' => 'unpublish articles']);
+
+        // create role 'banned'
+        Role::create(['name' => 'banned']);
         
         // gets all permissions via Gate::before rule; see AuthServiceProvider
         $roleAdmin = Role::create(['name' => 'admin']);
-        
+
         $admin = \App\Models\User::factory()->create([
             'name' => 'admin',
             'email' => 'admin@mail.ru',
             'password' => Hash::make(12345678)
         ]);
         $admin->assignRole($roleAdmin);
-        
+
         // $roleAdmin->givePermissionTo('edit articles');
         // $roleAdmin->givePermissionTo('delete articles');
         // $roleAdmin->givePermissionTo('publish articles');
