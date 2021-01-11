@@ -1,5 +1,4 @@
-<div class="container">
-    
+<div class="container">    
     @if(count($posts) > 0)
         <div class="mt-4">
             <h3>Список статей автора '{{ $user->name }}'</h3>
@@ -28,8 +27,7 @@
         <div class="mt-4">
             <h3>У автора '{{ $user->name }}' статей нет.</h3>
         </div>
-    @endif
-    
+    @endif    
     {{ $posts->links() }}
     <a href="{{ route('main') }}" class="btn btn-outline-secondary my-2 my-sm-0" role="button">Back</a
 </div>

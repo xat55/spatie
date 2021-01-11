@@ -7,7 +7,6 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Repositories\CategoryRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
-use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
@@ -19,6 +18,12 @@ class PostController extends AppBaseController
     private $postRepository;
     private $userRepository;
 
+    /**
+     * PostController constructor.
+     * @param CategoryRepository $categoryRepo
+     * @param PostRepository $postRepo
+     * @param UserRepository $userRepo
+     */
     public function __construct(CategoryRepository $categoryRepo, PostRepository $postRepo, UserRepository $userRepo)
     {
         $this->categoryRepository = $categoryRepo;
@@ -36,14 +41,14 @@ class PostController extends AppBaseController
     public function index(Request $request)
     {
         $user = auth()->user();
-        
+
         if ($user->hasRole('admin')) {
             $posts = $this->postRepository->allQuery([], 'id', 'desc');
         } else {
             $posts = $this->postRepository->allQuery(['user_id' => $user->id]);
         }
-        $posts = $posts->paginate(3);
-        
+        $posts = $posts->with('user', 'categories')->paginate(3);
+
         return view('posts.index')->with('posts', $posts);
     }
 
@@ -57,7 +62,7 @@ class PostController extends AppBaseController
         $categories = $this->categoryRepository->all()->pluck('name')->toArray();
         $categories = array_combine(range(1, count($categories)), $categories);
         $user = auth()->user();
-        
+
         return view('posts.create', compact('categories', 'user'));
     }
 
@@ -71,13 +76,13 @@ class PostController extends AppBaseController
     public function store(CreatePostRequest $request)
     {
         $input = $request->except('author');
-        $post = $this->postRepository->create($input);    
-        
+        $post = $this->postRepository->create($input);
+
         // Get the user and associate it with the post
         $userId = $request->get('userId');
         $user = $this->userRepository->find($userId);
         $post->user()->associate($user);
-        
+
         // привязываем категорию к посту
         $categoryIds = $request->get('categories');
         $this->associateCategoriesToPost($categoryIds, $post);
@@ -119,21 +124,21 @@ class PostController extends AppBaseController
         $post = $this->postRepository->find($id);
         $userId = $post->user_id;
         $user = $this->userRepository->find($userId);
-        
+
         // Get all users
         $users = $this->userRepository->all()->pluck('name')->toArray();
         $users = array_combine(range(1, count($users)), $users);
-        
+
         // Get all categories
         $categories = $this->categoryRepository->all()->pluck('name')->toArray();
         $categories = array_combine(range(1, count($categories)), $categories);
-        
+
         if (empty($post)) {
             Flash::error('Post not found');
 
             return redirect(route('posts.index'));
         }
-        
+
         return view('posts.edit', compact('categories', 'post', 'user', 'users'));
     }
 
@@ -148,24 +153,24 @@ class PostController extends AppBaseController
     public function update($id, UpdatePostRequest $request)
     {
         $post = $this->postRepository->find($id);
-        
+
         if (empty($post)) {
             Flash::error('Post not found');
-        
+
             return redirect(route('posts.index'));
         }
-        
-        // Отсоединяем пост от пользователя и категорий  
+
+        // Отсоединяем пост от пользователя и категорий
         $post->categories()->detach();
         $post->user()->dissociate();
-        
+
         // привязываем категорию к посту
         $categoryIds = $request->get('categories');
         $this->associateCategoriesToPost($categoryIds, $post);
-        
+
         // Обновляем редактируемый пост
         $post = $this->postRepository->update($request->except('author'), $id);
-        
+
         // привязываем новый пост к пользователю
         $authorName = $request->get('author');
         $user = $this->userRepository->all(['name' => $authorName])->first();
@@ -191,8 +196,6 @@ class PostController extends AppBaseController
         $post = $this->postRepository->find($id);
         // Отвяжем категории от поста
         $post->categories()->detach();
-        // Отвяжем пользователя от поста
-        $post->user()->dissociate();
 
         if (empty($post)) {
             Flash::error('Post not found');
@@ -206,7 +209,7 @@ class PostController extends AppBaseController
 
         return redirect(route('posts.index'));
     }
-    
+
     private function associateCategoriesToPost($categoryIds, $post)
     {
         for ($i = 0; $i < count($categoryIds); $i++) {

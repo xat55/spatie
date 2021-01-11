@@ -10,12 +10,10 @@
 </div>
 
 <!-- Text Field -->
-
-    <div class="form-group col-sm-12 col-lg-12">
-        {!! Form::label('text', 'Text:') !!}
-        {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
-    </div>
-
+<div class="form-group col-sm-12 col-lg-12">
+    {!! Form::label('text', 'Text:') !!}
+    {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
+</div>
 
 <!-- Categories Field -->
 <div class="form-group col-sm-6">
@@ -33,12 +31,14 @@
     </div>
 
     <!-- Users Field -->
-    <div class="form-group col-sm-6">
-        {!! Form::label('users', 'Users:') !!}   
-        <p>
-            {!! Form::select('users[]', $users, null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
-        </p> 
-    </div>
+    @isset($users)
+        <div class="form-group col-sm-6">
+            {!! Form::label('users', 'Users:') !!}   
+            <p>
+                {!! Form::select('users[]', $users, null, ['class' => 'form-control', 'multiple' => true,'maxlength' => 64,'maxlength' => 64]) !!}
+            </p> 
+        </div>
+    @endisset    
 @endrole
 
 

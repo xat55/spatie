@@ -56,6 +56,6 @@ class Category extends Model
     
     public function posts()
     {
-        return $this->belongsToMany('App\Models\Post')->withTimestamps();
+        return $this->belongsToMany(\App\Models\Post::class)->withTimestamps();
     }
 }

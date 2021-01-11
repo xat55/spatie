@@ -5,18 +5,27 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Repositories\UserRepository;
+use App\Repositories\PostRepository;
 use App\Http\Controllers\AppBaseController;
 use Illuminate\Http\Request;
 use Flash;
 use Response;
+use App\Models\User;
 
 class UserController extends AppBaseController
 {
     /** @var  UserRepository */
+    private $postRepository;
     private $userRepository;
 
-    public function __construct(UserRepository $userRepo)
+    /**
+     * UserController constructor.
+     * @param PostRepository $postRepo
+     * @param UserRepository $userRepo
+     */
+    public function __construct(PostRepository $postRepo, UserRepository $userRepo)
     {
+        $this->postRepository = $postRepo;
         $this->userRepository = $userRepo;
     }
 
@@ -58,7 +67,7 @@ class UserController extends AppBaseController
         $input['password'] = bcrypt($request->get('password'));
 
         $user = $this->userRepository->create($input);
-        
+
         Flash::success('User saved successfully.');
 
         return redirect(route('users.index'));
@@ -146,6 +155,20 @@ class UserController extends AppBaseController
             Flash::error('User not found');
 
             return redirect(route('users.index'));
+        }
+
+        $posts = $user->posts;
+
+        if ($posts->count() > 0) {
+
+            foreach ($posts as $post) {
+                // Отвяжем пользователя и категории от поста
+                $post->user()->dissociate($user);
+                $post->categories()->detach();
+                $this->postRepository->delete($post->id);
+            }
+
+            Flash::success('User related posts deleted successfully.');
         }
 
         $this->userRepository->delete($id);

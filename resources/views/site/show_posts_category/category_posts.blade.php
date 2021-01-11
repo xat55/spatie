@@ -1,5 +1,4 @@
-<div class="container">
-    
+<div class="container">    
     @if(count($posts) > 0)
         <div class="mt-4">
             <h3>Список статей категории '{{ $category->name }}'</h3>
@@ -15,7 +14,7 @@
             <tbody>    
                 @foreach($posts as $post)
                     <tr>
-                        <th scope="row">{{ $loop->iteration }}</th>
+                        <th scope="row">{{ $loop->index + $posts->firstItem() }}</th>
                         <td>{{ $post->header }}</td>                    
                         <td>{{ $post->text }}</td>          
                     </tr>
@@ -26,6 +25,7 @@
         <div class="mt-4">
             <h3>У категории '{{ $category->name }}' статей нет.</h3>
         </div>
-    @endif    
+    @endif        
+    {{ $posts->links() }}
     <a href="{{ route('main') }}" class="btn btn-outline-secondary my-2 my-sm-0" role="button">Back</a
 </div>

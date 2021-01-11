@@ -3,11 +3,13 @@
 namespace App\Models;
 
 // use Eloquent as Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
 /**
 * Class User
 * @package App\Models
@@ -24,25 +26,26 @@ use Spatie\Permission\Traits\HasRoles;
 * @property integer $current_team_id
 * @property string $profile_photo_path
 */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     // use SoftDeletes;
-    
-    use HasFactory, HasRoles;
-    
+
+    use HasFactory, HasRoles, Notifiable;
+
     public $table = 'users';
-    
+
     const CREATED_AT = 'created_at';
     const UPDATED_AT = 'updated_at';
-    
-    
+
+
     protected $dates = ['deleted_at'];
-    
-    
-    
+
+
+
     public $fillable = [
         'name',
         'email',
+        'activity',
         'email_verified_at',
         'password',
         'two_factor_secret',
@@ -51,7 +54,7 @@ class User extends Authenticatable
         'current_team_id',
         'profile_photo_path'
     ];
-    
+
     /**
     * The attributes that should be casted to native types.
     *
@@ -69,7 +72,7 @@ class User extends Authenticatable
         'current_team_id' => 'integer',
         'profile_photo_path' => 'string'
     ];
-    
+
     /**
     * Validation rules
     *
@@ -88,29 +91,20 @@ class User extends Authenticatable
         'created_at' => 'nullable',
         'updated_at' => 'nullable'
     ];
-    
-    // public function getPasswordAttribute($value)
-    // {
-    //     if (!Request::is('/users.store')) {
-    //         // code...
-    //         return bcrypt($value);
-    //     }
-    // }
-    // public function setPasswordAttribute($value)
-    // {
-    //     $this->attributes['password'] = bcrypt($value);
-    // }
-    
+
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasMany
     **/
-    // public function postUsers()
-    // {
-    //     return $this->hasMany(\App\Models\PostUser::class, 'user_id');
-    // }
-    
+    public function role()
+    {
+        return $this->belongsTo(\App\Models\Role::class, 'role_id', 'model_id', 'model_has_roles');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
-        return $this->belongsToMany('App\Models\Post')->withTimestamps();
+        return $this->hasMany(\App\Models\Post::class);
     }
 }

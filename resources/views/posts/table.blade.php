@@ -7,7 +7,7 @@
                     <th>Text</th>
                     <th>Categories</th>
                     <th>Author</th>
-                    <th colspan="3">Action</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,5 +33,5 @@
         {{ $posts->links() }}
     </div>
 @else
- <p>Posts not found</p>
+    <p>Posts not found</p>
 @endif

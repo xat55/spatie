@@ -1,5 +1,4 @@
 <div class="container">
-    
     @if(count($posts) > 0)
         <div class="mt-4">
             <h3>Список статей по запросу '{{ Request::get('s') }}'</h3>

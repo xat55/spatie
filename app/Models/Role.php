@@ -5,6 +5,7 @@ namespace App\Models;
 use Eloquent as Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use User;
 
 /**
  * Class Role
@@ -63,9 +64,9 @@ class Role extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      **/
-    public function modelHasRole()
+    public function user()
     {
-        return $this->hasOne(\App\Models\ModelHasRole::class);
+        return $this->hasOne(\App\Models\User::class, 'model_id', 'role_id','model_has_roles');
     }
 
     /**

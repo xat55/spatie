@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\PermissionRegistrar;
-// use App\Models\Role;
 
 class AddingRoleToUser
 {
@@ -20,27 +19,25 @@ class AddingRoleToUser
     */
     public function handle(Request $request, Closure $next, $role)
     {
-        $response = $next($request);          
-        
-        $user = auth()->user();    
+        $user = auth()->user();
         $rolesCount = Role::where('name', $role)->count();
-        
-        if (!$user->hasRole('admin') && !$user->hasRole($role)) {
+
+        if (!$user->hasRole('admin') && !$user->hasRole($role) && !$user->hasRole('banned')) {
             app()[PermissionRegistrar::class]->forgetCachedPermissions();
-            
-            if (0 === $rolesCount) {                            
-                $roleUser = Role::create(['name' => $role]);                  
-                $user->assignRole($roleUser);                
+
+            if (0 === $rolesCount) {
+                $roleUser = Role::create(['name' => $role]);
+                $user->assignRole($roleUser);
                 $permissions = Permission::pluck('name');
-                
+
                 foreach ($permissions as $permission) {
                     $roleUser->givePermissionTo($permission);
-                }            
+                }
             } else {
                 $user->assignRole($role);
             }
         }
-        // return $next($request);
-        return $response;
+
+        return $next($request);
     }
 }

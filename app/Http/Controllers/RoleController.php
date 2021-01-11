@@ -15,6 +15,10 @@ class RoleController extends AppBaseController
     /** @var  RoleRepository */
     private $roleRepository;
 
+    /**
+     * RoleController constructor.
+     * @param RoleRepository $roleRepo
+     */
     public function __construct(RoleRepository $roleRepo)
     {
         $this->roleRepository = $roleRepo;
@@ -29,9 +33,9 @@ class RoleController extends AppBaseController
      */
     public function index(Request $request)
     {
-        // $roles = $this->roleRepository->all();        
+        // $roles = $this->roleRepository->all();
         $roles = $this->roleRepository->all()->sortBy('name');
-        
+
         return view('roles.index')
             ->with('roles', $roles);
     }
