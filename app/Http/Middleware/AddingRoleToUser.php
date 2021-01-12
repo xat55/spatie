@@ -21,8 +21,9 @@ class AddingRoleToUser
     {
         $user = auth()->user();
         $rolesCount = Role::where('name', $role)->count();
+        $roles = $user->getRoleNames();
 
-        if (!$user->hasRole('admin') && !$user->hasRole($role) && !$user->hasRole('banned')) {
+        if (0 === $roles->count()) {
             app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
             if (0 === $rolesCount) {

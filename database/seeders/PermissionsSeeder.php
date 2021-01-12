@@ -28,7 +28,7 @@ class PermissionsSeeder extends Seeder
 
         // create role 'banned'
         Role::create(['name' => 'banned']);
-        
+
         // gets all permissions via Gate::before rule; see AuthServiceProvider
         $roleAdmin = Role::create(['name' => 'admin']);
 
