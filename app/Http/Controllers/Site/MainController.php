@@ -45,7 +45,7 @@ class MainController extends SiteController
         $content = view(env('THEME').'.parts.content')->with('posts', $posts)->render();
         $this->vars = Arr::add($this->vars, 'content', $content);
 
-        $lastTwoPosts = $this->post_rep->all([], 'id', 'desc');
+        $lastTwoPosts = $this->post_rep->all([], 'id', 'desc', 0, 2);
         $lastTwoPostsView = view(env('THEME').'.parts.last_two_posts')
             ->with('posts', $lastTwoPosts)->render();
         $this->vars = Arr::add($this->vars, 'lastTwoPosts', $lastTwoPostsView);
