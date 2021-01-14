@@ -26,5 +26,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
+        
+        // @set($i, 1)
+        Blade::directive('set', function($exp) {
+            list($name, $val) = explode(', ', $exp);
+            
+            return "<?php $name = $val ?>"; 
+        });
     }
 }
