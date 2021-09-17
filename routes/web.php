@@ -3,36 +3,27 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
-
 use App\Http\Controllers\Site\MainController;
+use App\Http\Controllers\Site\SinglePostController;
+use App\Http\Controllers\Site\AuthorPostsController;
+use App\Http\Controllers\Site\CategoryPostsController;
+use App\Http\Controllers\Site\SearchPostsController;
+use App\Http\Controllers\Site\ActivityUsersController;
+
+
 Route::get('/', [MainController::class, 'index'])->name('main');
 
-use App\Http\Controllers\Site\SinglePostController;
 Route::get('show-post/{post_id}', [SinglePostController::class, 'index'])
     ->name('single_post');
 
-use App\Http\Controllers\Site\AuthorPostsController;
 Route::get('show-posts-author/{user_id}', [AuthorPostsController::class, 'index'])
     ->name('show_posts_author');
 
-use App\Http\Controllers\Site\CategoryPostsController;
 Route::get('show-posts-category/{category_id}', [CategoryPostsController::class, 'index'])
     ->name('show_posts_category');
 
-use App\Http\Controllers\Site\SearchPostsController;
 Route::get('search', [SearchPostsController::class, 'index'])->name('search');
 
-use App\Http\Controllers\Site\ActivityUsersController;
 Route::get('block_user/{post_id}', [ActivityUsersController::class, 'blockUser'])->name('block_user');
 
 // -----------------------------------------------------------------------------
@@ -58,7 +49,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 Route::middleware(['auth', 'verified', 'addingRoleToUser:user', 'role:admin|user'])
     ->get('/dashboard', function () {
-    
+
     return view('dashboard');
 })->name('dashboard');
 
